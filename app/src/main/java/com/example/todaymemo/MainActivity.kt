@@ -1,47 +1,49 @@
 package com.example.todaymemo
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.todaymemo.ui.theme.TodayMemoTheme
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            TodayMemoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+        // XMLのレイアウトを画面にセット
+        setContentView(R.layout.activity_main)
+
+        // XMLの部品をIDで取得
+        val editTextTask = findViewById<EditText>(R.id.editTextTask)
+        val buttonAdd = findViewById<Button>(R.id.buttonAdd)
+        val listViewTasks = findViewById<ListView>(R.id.listViewTasks)
+
+        // タスクを保存するリスト（アプリを閉じると消えます）
+        val taskList = mutableListOf<String>()
+
+        // リストとListViewを繋ぐアダプターの設定
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, taskList)
+        listViewTasks.adapter = adapter
+
+        // 「追加」ボタンが押された時の動作
+        buttonAdd.setOnClickListener {
+            val taskText = editTextTask.text.toString()
+
+            if (taskText.isNotEmpty()) {
+                // リストにタスクを追加
+                taskList.add(taskText)
+                
+                // アダプターにデータ更新を通知（画面に反映される）
+                adapter.notifyDataSetChanged()
+                
+                // 入力欄を空にする
+                editTextTask.text.clear()
+            } else {
+                // 何も入力されていない場合はトーストを表示
+                Toast.makeText(this, "タスクを入力してください", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TodayMemoTheme {
-        Greeting("Android")
     }
 }

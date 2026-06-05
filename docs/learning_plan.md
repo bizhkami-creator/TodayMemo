@@ -17,47 +17,35 @@ Androidアプリ開発の基礎を学ぶ。
 
 ## Day1 環境準備
 
-### 作業
+- [x] Android Studioプロジェクト作成
+- [x] GitHubリポジトリ作成
+- [x] 初回Push
+- [x] フォルダ構成確認
 
-* Android Studio確認
-* Git確認
-* VS Code確認
-* TodoAppプロジェクト作成
-
-### 成果
-
-* プロジェクト作成完了
-* エミュレータ起動確認
-
-### 学習内容
-
-* [x] プロジェクト作成
-* [x] Git
-* [x] プロジェクト構成、フォルダ・ファイル構成確認
+学んだこと
+- MainActivity.kt が処理担当
+- activity_main.xml が画面担当
 
 
 ---
 
 ## Day2 Compose基礎
 
-### 作業
+- [x] タイトル表示
+- [x] 入力欄（EditText）追加
+- [x] 追加ボタン作成
+- [x] タスク一覧表示
+- [x] ボタン押下で一覧に追加
 
-* Text表示
-* Button表示
-* Column配置
+学んだこと
+- EditTextで文字入力を受け取れる
+- Buttonにクリックイベントを設定できる
+- ListView（またはRecyclerView）にデータを表示できる
+- KotlinコードとXMLレイアウトが連携して動く
 
-### 成果
+Git Commit
+- Add basic todo input screen
 
-```text
-今日やること
-
-[追加]
-```
-
-### 学習内容
-
-* Composable
-* Composeの基本構造
 
 ---
 
