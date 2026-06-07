@@ -71,257 +71,279 @@ Git Commit
 
 ---
 
-## Day4 入力欄
+## Day4
 
-### 作業
+- [x] SharedPreferences学習
+- [x] タスク保存
+- [x] タスク読み込み
+- [x] アプリ再起動後も保持
 
-* TextField追加
+学んだこと
+- ArrayListはメモリ上の一時データ
+- SharedPreferencesは端末内保存
+- 起動時に読み込みが必要
+- データ変更時に保存が必要
+- 
+---
 
-### 成果
+## Day5
 
-```text
-[___________]
-```
+### 目標
 
-### 学習内容
+Todoアプリらしい完了チェック機能を追加する
 
-* State
-* remember
+### 実施内容
+
+* [ ] CheckBox追加
+* [ ] タスク完了機能
+* [ ] 完了状態の保存
+* [ ] 完了タスクの見た目変更
+
+### 学ぶこと
+
+* CheckBox
+* データモデル（Taskクラス）
+* Boolean型
+* オブジェクト管理
+
+### Git Commit
+
+* Add task completion feature
 
 ---
 
-## Day5 タスク追加
+## Day6
 
-### 作業
+### 目標
 
-* 入力内容を一覧へ追加
+ListViewからRecyclerViewへ移行する
 
-### 成果
+### 実施内容
 
-```text
-□ 月次決算
-□ 犬の散歩
-```
+* [ ] RecyclerView導入
+* [ ] Adapter作成
+* [ ] ViewHolder作成
+* [ ] 既存機能の移植
 
-### 学習内容
+### 学ぶこと
 
-* State管理
-* 再描画
+* RecyclerView
+* Adapter
+* ViewHolder
+* Android標準UI設計
+
+### Git Commit
+
+* Migrate to RecyclerView
 
 ---
 
-## Day6 ViewModel導入
+## Day7
 
-### 作業
+### 目標
 
-* 画面と処理を分離
+UIを改善する
 
-### 成果
+### 実施内容
 
-```text
-UI
-↓
-ViewModel
-```
+* [ ] Material Design導入
+* [ ] ボタンデザイン改善
+* [ ] 余白調整
+* [ ] アイコン追加
 
-### 学習内容
+### 学ぶこと
+
+* Material Design
+* Layout設計
+* UI/UX基礎
+
+### Git Commit
+
+* Improve UI design
+
+---
+
+## Day8
+
+### 目標
+
+Room Databaseを学ぶ
+
+### 実施内容
+
+* [ ] Room概要理解
+* [ ] Entity作成
+* [ ] DAO作成
+* [ ] Database作成
+
+### 学ぶこと
+
+* SQLite
+* Room
+* Entity
+* DAO
+
+### Git Commit
+
+* Add Room Database setup
+
+---
+
+## Day9
+
+### 目標
+
+SharedPreferencesからRoomへ移行する
+
+### 実施内容
+
+* [ ] タスク保存をRoom化
+* [ ] タスク読込をRoom化
+* [ ] 動作確認
+
+### 学ぶこと
+
+* CRUD
+* 非同期処理
+* 永続化設計
+
+### Git Commit
+
+* Migrate persistence to Room
+
+---
+
+## Day10
+
+### 目標
+
+アーキテクチャを学ぶ
+
+### 実施内容
+
+* [ ] Repository作成
+* [ ] ViewModel導入
+* [ ] データ管理整理
+
+### 学ぶこと
 
 * MVVM
 * ViewModel
+* Repository Pattern
+
+### Git Commit
+
+* Introduce MVVM architecture
 
 ---
 
-## Day7 Git/GitHub
+## Day11
 
-### 作業
+### 目標
 
-* Git初期化
-* Commit
-* Push
+検索機能を追加する
 
-### 成果
+### 実施内容
 
-* GitHubへ保存
+* [ ] 検索欄追加
+* [ ] リアルタイム検索
+* [ ] フィルタリング
 
-### 学習内容
+### 学ぶこと
 
-* Git基本操作
+* SearchView
+* List Filtering
 
----
+### Git Commit
 
-## Day8 Room準備
-
-### 作業
-
-作成ファイル
-
-* Todo.kt
-* TodoDao.kt
-* TodoDatabase.kt
-
-### 学習内容
-
-* Entity
-* DAO
-* Database
+* Add search functionality
 
 ---
 
-## Day9 Room保存
+## Day12
 
-### 作業
+### 目標
 
-* Room連携
+並び替え機能を追加する
 
-### 成果
+### 実施内容
 
-```text
-アプリ終了
-↓
-再起動
-↓
-データ保持
-```
+* [ ] 作成順
+* [ ] 完了順
+* [ ] 名前順
 
-### 学習内容
+### 学ぶこと
 
-* Repository
-* Room連携
+* Comparator
+* ソート処理
 
----
+### Git Commit
 
-## Day10 削除機能
-
-### 作業
-
-* 削除ボタン追加
-
-### 成果
-
-```text
-🗑 ボタンで削除
-```
+* Add sorting options
 
 ---
 
-## Day11 完了チェック
+## Day13
 
-### 作業
+### 目標
 
-* Checkbox追加
+リファクタリングを行う
 
-### 成果
+### 実施内容
 
-```text
-☑ 月次決算
-```
+* [ ] 不要コード削除
+* [ ] コメント整理
+* [ ] 命名統一
+* [ ] フォルダ構成整理
 
-### 学習内容
+### 学ぶこと
 
-* 状態管理
+* リファクタリング
+* 保守性向上
 
----
+### Git Commit
 
-## Day12 UI改善
-
-### 作業
-
-* レイアウト調整
-* 間隔調整
-* 見た目改善
-
-### 成果
-
-* 見やすい画面
+* Refactor project structure
 
 ---
 
-## Day13 ドキュメント整理
+## Day14
 
-### 作業
+### 目標
 
-更新ファイル
+プロジェクトを完成させる
 
-* README.md
-* requirements.md
-* development_log.md
+### 実施内容
 
-### 学習内容
+* [ ] 最終テスト
+* [ ] README作成
+* [ ] スクリーンショット取得
+* [ ] GitHub整理
 
-* Markdown
-* ドキュメント管理
+### 学ぶこと
 
----
+* リリース準備
+* ドキュメント作成
 
-## Day14 振り返り
+### Git Commit
 
-### 作業
-
-* GitHub確認
-* README整理
-* 学習内容整理
-
-### 成果
-
-* Todoアプリ完成
+* Release v1.0
 
 ---
 
-# 毎日の共通ルーチン
-
-## 開始5分
-
-* development_log.md確認
-* 今日の作業確認
-
-## 作業20分
-
-* 実装
-
-## 終了5分
-
-development_log.md更新
-
-例
-
-```md
-# Day5
-
-## やったこと
-
-- タスク追加機能実装
-
-## 困ったこと
-
-- Stateの理解不足
-
-## 次回
-
-- ViewModel導入
-```
-
----
-
-# 2週間後に習得する内容
+## このTodoアプリで習得する技術
 
 * Kotlin基礎
-* Jetpack Compose
-* ViewModel
+* Activity
+* Layout XML
+* Event処理
+* ListView
+* RecyclerView
+* SharedPreferences
 * Room Database
-* Git/GitHub
-* Android Studio操作
-* AIを活用した開発フロー
-
----
-
-# 次のステップ
-
-音声TODOアプリへ発展
-
-追加機能
-
-* 音声認識
-* TTS読み上げ
-* 通知
-* ウィジェット
-* 音声コマンド
+* MVVM
+* Git
+* GitHub
+* Material Design
+* Android Studio
+* Geminiを使ったVibe Coding
