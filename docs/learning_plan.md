@@ -88,27 +88,29 @@ Git Commit
 
 ## Day5
 
-### 目標
-
-Todoアプリらしい完了チェック機能を追加する
-
 ### 実施内容
+- [x] Taskクラスを作成
+- [x] ArrayList<String> から ArrayList<Task> に変更
+- [x] CheckBoxを表示
+- [x] 完了状態 completed を true / false で管理
+- [x] 完了状態をSharedPreferencesに保存
+- [x] 完了済みタスクに取り消し線を表示
+- [x] 完了済みタスクの文字色を薄くした
 
-* [ ] CheckBox追加
-* [ ] タスク完了機能
-* [ ] 完了状態の保存
-* [ ] 完了タスクの見た目変更
+### 学んだこと
+- data classで複数の情報をまとめて管理できる
+- Booleanで完了/未完了を表せる
+- CheckBoxで状態を切り替えられる
+- 文字列だけでなくオブジェクトを保存するには工夫が必要
+- Adapterで一覧の見た目を制御できる
 
-### 学ぶこと
+### Git履歴
+Commit:
+Add task completion feature
 
-* CheckBox
-* データモデル（Taskクラス）
-* Boolean型
-* オブジェクト管理
-
-### Git Commit
-
-* Add task completion feature
+### 次回やること（Day6）
+- ListViewからRecyclerViewへ移行
+- AdapterとViewHolderを学ぶ
 
 ---
 

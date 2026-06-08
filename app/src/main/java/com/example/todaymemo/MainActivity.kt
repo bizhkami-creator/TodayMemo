@@ -1,12 +1,13 @@
 package com.example.todaymemo
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,66 +15,64 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 部品の取得
         val editTextTask = findViewById<EditText>(R.id.editTextTask)
         val buttonAdd = findViewById<Button>(R.id.buttonAdd)
         val listViewTasks = findViewById<ListView>(R.id.listViewTasks)
 
-        // 【読み込み】アプリ起動時に保存されたデータを取得
         val taskList = loadTasks()
 
-        // アダプターの設定
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, taskList)
+        // アダプター作成時に「保存処理」を渡すようにした
+        val adapter = TaskAdapter(this, taskList) {
+            saveTasks(taskList)
+        }
         listViewTasks.adapter = adapter
 
-        // 「追加」ボタンの動作
         buttonAdd.setOnClickListener {
             val taskText = editTextTask.text.toString()
 
             if (taskText.isNotEmpty()) {
-                taskList.add(taskText)
+                val newTask = Task(title = taskText)
+                taskList.add(newTask)
+                
                 adapter.notifyDataSetChanged()
                 editTextTask.text.clear()
-
-                // 【保存】追加したらデータを保存
                 saveTasks(taskList)
             } else {
                 Toast.makeText(this, "タスクを入力してください", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // 【削除】タスクを「長押し」した時に削除する機能
         listViewTasks.setOnItemLongClickListener { _, _, position, _ ->
-            // リストから削除
             taskList.removeAt(position)
             adapter.notifyDataSetChanged()
-
-            // 【保存】削除した後の状態を保存
             saveTasks(taskList)
-
             Toast.makeText(this, "削除しました", Toast.LENGTH_SHORT).show()
-            true // イベントをここで終了させるという意味
+            true
         }
     }
 
     /**
-     * データを保存する関数（引き出しにしまう）
+     * 保存処理 (Gsonを使ってリストを丸ごとJSON文字列に変換)
      */
-    private fun saveTasks(taskList: List<String>) {
+    private fun saveTasks(taskList: List<Task>) {
         val prefs = getSharedPreferences("TodayMemoPrefs", MODE_PRIVATE)
-        val editor = prefs.edit()
-        // StringのリストをSet形式に変換して保存（順番は保証されませんが、一番簡単な方法です）
-        editor.putStringSet("tasks", taskList.toSet())
-        editor.apply()
+        val gson = Gson()
+        // リストを丸ごと一つの文字列（JSON）にする
+        val json = gson.toJson(taskList)
+        
+        prefs.edit().putString("tasks_json", json).apply()
     }
 
     /**
-     * データを読み込む関数（引き出しから出す）
+     * 読み込み処理 (JSON文字列をTaskのリストに戻す)
      */
-    private fun loadTasks(): MutableList<String> {
+    private fun loadTasks(): MutableList<Task> {
         val prefs = getSharedPreferences("TodayMemoPrefs", MODE_PRIVATE)
-        val set = prefs.getStringSet("tasks", emptySet())
-        // 保存されていたらリストに変換して返し、なければ空のリストを返す
-        return set?.toMutableList() ?: mutableListOf()
+        val json = prefs.getString("tasks_json", null) ?: return mutableListOf()
+        
+        val gson = Gson()
+        // JSON文字列を List<Task> 型に変換するための魔法の呪文
+        val type = object : TypeToken<List<Task>>() {}.type
+        return gson.fromJson(json, type)
     }
 }
