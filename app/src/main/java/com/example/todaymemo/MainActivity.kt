@@ -1,13 +1,13 @@
 package com.example.todaymemo
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -18,26 +18,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val editTextTask = findViewById<EditText>(R.id.editTextTask)
-        val buttonAdd = findViewById<Button>(R.id.buttonAdd)
+        val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
         val recyclerViewTasks = findViewById<RecyclerView>(R.id.recyclerViewTasks)
 
         val taskList = loadTasks()
 
-        // アダプターの作成（2つの合図を受け取る）
         val adapter = TaskAdapter(
             taskList,
             onStatusChanged = { 
-                saveTasks(taskList) // チェックが変わったら保存
+                saveTasks(taskList)
             },
             onItemLongClicked = { position ->
-                showDeleteDialog(position, taskList, recyclerViewTasks.adapter!!) // 長押しされたらダイアログ
+                showDeleteDialog(position, taskList, recyclerViewTasks.adapter!!)
             }
         )
         
         recyclerViewTasks.adapter = adapter
         recyclerViewTasks.layoutManager = LinearLayoutManager(this)
 
-        buttonAdd.setOnClickListener {
+        // FABが押された時の動作
+        fabAdd.setOnClickListener {
             val taskText = editTextTask.text.toString()
             if (taskText.isNotEmpty()) {
                 val newTask = Task(title = taskText)
@@ -51,9 +51,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 削除確認ダイアログを表示する
-     */
     private fun showDeleteDialog(position: Int, taskList: MutableList<Task>, adapter: RecyclerView.Adapter<*>) {
         AlertDialog.Builder(this)
             .setTitle("削除の確認")
