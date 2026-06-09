@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- AppCompatActivity を使うためにテーマを修正 -->
-    <style name="Theme.TodayMemo" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- プライマリーカラーの設定（必要に応じて） -->
+    <!-- MaterialCardView を使うために Theme.MaterialComponents に変更 -->
+    <style name="Theme.TodayMemo" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- プライマリーカラーの設定 -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
