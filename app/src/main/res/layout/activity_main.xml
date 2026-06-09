@@ -6,7 +6,7 @@
     android:background="@color/background_light_gray"
     android:padding="16dp">
 
-    <!-- タイトル：大きく、力強く -->
+    <!-- タイトル -->
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
@@ -35,7 +35,18 @@
             android:textColorHint="@color/gray_text" />
     </LinearLayout>
 
-    <!-- RecyclerView：背景との境目をなくすためマージン調整 -->
+    <!-- タスクがない時のメッセージ（初期状態は消しておく） -->
+    <TextView
+        android:id="@+id/textViewEmptyMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="今日やることはありません！"
+        android:textSize="18sp"
+        android:textColor="@color/gray_text"
+        android:visibility="gone" />
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
         android:layout_width="match_parent"
@@ -44,7 +55,7 @@
         android:clipToPadding="false"
         android:paddingBottom="80dp" />
 
-    <!-- FAB：色鮮やかに -->
+    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
@@ -55,6 +66,7 @@
         app:srcCompat="@android:drawable/ic_input_add"
         app:backgroundTint="@color/purple_500"
         app:tint="@color/white"
-        app:elevation="8dp" />
+        app:elevation="8dp"
+        android:contentDescription="追加" />
 
 </RelativeLayout>
