@@ -186,26 +186,46 @@ Migrate Todo app from ListView to RecyclerView
 ## Day7
 
 ### 目標
-
-UIを改善する
+Material Design風のUIへ改善する
 
 ### 実施内容
+- [x] CardView化
+- [x] FAB導入
+- [x] カラー調整
+- [x] アイコン調整
+- [x] 空状態メッセージ追加
+- [x] FABレイアウト不具合修正
 
-* [ ] Material Design導入
-* [ ] ボタンデザイン改善
-* [ ] 余白調整
-* [ ] アイコン追加
+### 学んだこと
 
-### 学ぶこと
+#### CardView
+- タスクをカード形式で表示できる
+- Material Designらしい見た目になる
 
-* Material Design
-* Layout設計
-* UI/UX基礎
+#### Floating Action Button
+- 主要アクションを強調できる
+- Androidアプリでよく使われるUI
 
-### Git Commit
+#### レイアウト調整
+- View同士の重なりに注意する
+- RecyclerViewには余白設定が重要
 
-* Improve UI design
+#### Empty State
+- データがない時の画面設計も重要
+- ユーザーに現在の状態を伝えられる
 
+### Git履歴
+
+Commit:
+Improve UI with CardView and FAB
+
+### 次回やること（Day8）
+- Room Database導入
+- SharedPreferencesとの違いを学ぶ
+- Entity作成
+- DAO作成
+- Database作成
+- 
 ---
 
 ## Day8
