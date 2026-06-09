@@ -36,9 +36,9 @@
             android:text="追加" />
     </LinearLayout>
 
-    <!-- タスク一覧表示用 -->
-    <ListView
-        android:id="@+id/listViewTasks"
+    <!-- ListView から RecyclerView に変更 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewTasks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

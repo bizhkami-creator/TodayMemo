@@ -117,26 +117,69 @@ Add task completion feature
 ## Day6
 
 ### 目標
-
-ListViewからRecyclerViewへ移行する
+ListViewからRecyclerViewへ移行し、Android標準的な一覧表示を学ぶ
 
 ### 実施内容
+- [x] RecyclerViewを導入
+- [x] item_task.xmlを作成
+- [x] TaskAdapter.ktを作成
+- [x] ViewHolderを実装
+- [x] RecyclerViewとAdapterを接続
+- [x] タスク追加機能を移植
+- [x] CheckBox機能を移植
+- [x] 完了状態の保存機能を移植
+- [x] 完了済みタスクの見た目変更を移植
+- [x] 長押し削除機能を移植
+- [x] SharedPreferences保存との連携確認
 
-* [ ] RecyclerView導入
-* [ ] Adapter作成
-* [ ] ViewHolder作成
-* [ ] 既存機能の移植
+### 学んだこと
 
-### 学ぶこと
+#### RecyclerView
+- Androidで標準的に使われる一覧表示コンポーネント
+- ListViewより柔軟で高速
+- 大量データでも効率よく表示できる
 
-* RecyclerView
-* Adapter
-* ViewHolder
-* Android標準UI設計
+#### Adapter
+- データと画面表示をつなぐ役割
+- TaskデータをRecyclerViewへ表示する
+- データ変更時は `notifyDataSetChanged()` などで更新する
 
-### Git Commit
+#### ViewHolder
+- CheckBoxやTextViewなどのViewを保持する仕組み
+- `findViewById()` の呼び出し回数を減らし高速化できる
+- RecyclerViewのパフォーマンス向上に重要
 
-* Migrate to RecyclerView
+#### 責務分離
+- TaskAdapter
+  - 画面表示
+  - CheckBox状態変更
+  - 長押しイベント通知
+- MainActivity
+  - データ管理
+  - SharedPreferences保存
+  - 削除ダイアログ表示
+
+#### リファクタリング
+- 機能を変えずに内部構造を改善すること
+- 今回は見た目は同じままListViewからRecyclerViewへ変更した
+
+### 困ったこと
+- RecyclerViewとAdapterの関係が最初理解しづらかった
+- ViewHolderの役割が分かりにくかった
+- ListView時代のコードをどこへ移植するか迷った
+
+### 動作確認
+- [x] タスク追加
+- [x] タスク削除
+- [x] チェック状態変更
+- [x] 完了タスクの取り消し線
+- [x] SharedPreferences保存
+- [x] アプリ再起動後の復元
+
+### Git履歴
+
+Commit:
+Migrate Todo app from ListView to RecyclerView
 
 ---
 

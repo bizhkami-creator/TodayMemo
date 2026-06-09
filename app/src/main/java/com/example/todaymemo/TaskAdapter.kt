@@ -1,69 +1,66 @@
 package com.example.todaymemo
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
-/**
- * @param onStatusChanged チェック状態が変わった時に呼ばれる関数（MainActivityの保存処理を渡す用）
- */
 class TaskAdapter(
-    context: Context,
     private val taskList: List<Task>,
-    private val onStatusChanged: () -> Unit
-) : ArrayAdapter<Task>(context, 0, taskList) {
+    private val onStatusChanged: () -> Unit,      // 保存用の合図
+    private val onItemLongClicked: (Int) -> Unit // 削除用の合図
+) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.list_item_task, parent, false)
+    class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val checkBoxDone: CheckBox = view.findViewById(R.id.checkBoxDone)
+        val textViewTaskTitle: TextView = view.findViewById(R.id.textViewTaskTitle)
+    }
 
-        val task = getItem(position) ?: return view
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_task, parent, false)
+        return TaskViewHolder(view)
+    }
 
-        val checkBox = view.findViewById<CheckBox>(R.id.checkBoxDone)
-        val textView = view.findViewById<TextView>(R.id.textViewTaskTitle)
-
-        // データのセット
-        textView.text = task.title
+    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
+        val task = taskList[position]
+        holder.textViewTaskTitle.text = task.title
         
-        // チェックボックスの状態反映（一度リスナーを解除）
-        checkBox.setOnCheckedChangeListener(null)
-        checkBox.isChecked = task.isCompleted
+        // チェック状態の反映
+        holder.checkBoxDone.setOnCheckedChangeListener(null) // リスナーの混線を防ぐ
+        holder.checkBoxDone.isChecked = task.isCompleted
 
-        // --- 見た目の更新関数（共通で使うので関数にまとめます） ---
-        fun updateTextStyle(isCompleted: Boolean) {
-            if (isCompleted) {
-                // 取り消し線を付ける
-                textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                // 文字色をグレーにする
-                textView.setTextColor(Color.GRAY)
-            } else {
-                // 取り消し線を消す
-                textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                // 文字色を黒（デフォルト）に戻す
-                textView.setTextColor(Color.BLACK)
-            }
-        }
-
-        // 最初の表示状態を反映
-        updateTextStyle(task.isCompleted)
+        // 見た目の更新
+        updateTextStyle(holder.textViewTaskTitle, task.isCompleted)
 
         // チェックを切り替えた時の動作
-        checkBox.setOnCheckedChangeListener { _, isChecked ->
+        holder.checkBoxDone.setOnCheckedChangeListener { _, isChecked ->
             task.isCompleted = isChecked
-            
-            // タップした瞬間に見た目を変える！
-            updateTextStyle(isChecked)
-            
-            // 保存処理を呼ぶ
-            onStatusChanged()
+            updateTextStyle(holder.textViewTaskTitle, isChecked)
+            onStatusChanged() // 保存してね！と合図を送る
         }
 
-        return view
+        // 長押しした時の動作
+        holder.itemView.setOnLongClickListener {
+            onItemLongClicked(holder.adapterPosition) // この番号を消してね！と合図を送る
+            true
+        }
+    }
+
+    override fun getItemCount(): Int = taskList.size
+
+    // 見た目を更新する共通関数
+    private fun updateTextStyle(textView: TextView, isCompleted: Boolean) {
+        if (isCompleted) {
+            textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            textView.setTextColor(Color.GRAY)
+        } else {
+            textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            textView.setTextColor(Color.BLACK)
+        }
     }
 }
