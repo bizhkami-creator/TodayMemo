@@ -1,15 +1,19 @@
 package com.example.todaymemo
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 /**
- * タスクの情報をまとめて持つためのクラス
- * @param title タスクの名前
- * @param isCompleted 完了しているかどうか（true: 完了, false: 未完了）
+ * データベースの「1行」を表現するクラス
  */
+@Entity(tableName = "tasks")
 data class Task(
-    val title: String,
-    var isCompleted: Boolean = false // 最初は必ず「未完了」にする
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,          // 自動で割り振られるID（出席番号）
+    val title: String,        // タスク名
+    var isCompleted: Boolean = false // 完了フラグ
 ) {
-    // ListViewに表示される文字を定義する（これがないと変な英数字が表示されます）
+    // カスタムアダプターやログ用
     override fun toString(): String {
         return if (isCompleted) "[完了] $title" else title
     }
