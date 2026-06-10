@@ -236,10 +236,10 @@ Room Databaseを学ぶ
 
 ### 実施内容
 
-* [ ] Room概要理解
-* [ ] Entity作成
-* [ ] DAO作成
-* [ ] Database作成
+* [x] Room概要理解
+* [x] Entity作成
+* [x] DAO作成
+* [x] Database作成
 
 ### 学ぶこと
 
@@ -262,15 +262,17 @@ SharedPreferencesからRoomへ移行する
 
 ### 実施内容
 
-* [ ] タスク保存をRoom化
-* [ ] タスク読込をRoom化
-* [ ] 動作確認
+* [x] タスク保存をRoom化
+* [x] タスク読込をRoom化
+* [x] タスク更新（チェック状態）をRoom化
+* [x] タスク削除をRoom化
+* [x] 動作確認
 
 ### 学ぶこと
 
-* CRUD
-* 非同期処理
-* 永続化設計
+* CRUD (Create, Read, Update, Delete) 操作
+* Coroutinesによる非同期処理 (`lifecycleScope`, `Dispatchers.IO`)
+* SharedPreferencesからの完全移行とコード整理
 
 ### Git Commit
 
