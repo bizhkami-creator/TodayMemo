@@ -7,97 +7,108 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var taskDao: TaskDao
+    private val taskList = mutableListOf<Task>()
+    private lateinit var adapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val db = AppDatabase.getDatabase(this)
+        taskDao = db.taskDao()
 
         val editTextTask = findViewById<EditText>(R.id.editTextTask)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
         val recyclerViewTasks = findViewById<RecyclerView>(R.id.recyclerViewTasks)
         val textViewEmptyMessage = findViewById<TextView>(R.id.textViewEmptyMessage)
 
-        val taskList = loadTasks()
-
-        val adapter = TaskAdapter(
+        adapter = TaskAdapter(
             taskList,
-            onStatusChanged = { 
-                saveTasks(taskList)
+            onStatusChanged = { updatedTask -> 
+                updateTaskInRoom(updatedTask)
             },
-            onItemLongClicked = { position ->
-                showDeleteDialog(position, taskList, recyclerViewTasks.adapter!!, textViewEmptyMessage)
+            onItemLongClicked = { taskToDelete ->
+                // 【Room移行ポイント】タスクを渡してダイアログを表示
+                showDeleteDialog(taskToDelete, textViewEmptyMessage)
             }
         )
         
         recyclerViewTasks.adapter = adapter
         recyclerViewTasks.layoutManager = LinearLayoutManager(this)
 
-        // 起動時の表示状態を更新
-        updateEmptyMessageVisibility(taskList, textViewEmptyMessage)
+        loadTasksFromRoom(textViewEmptyMessage)
 
         fabAdd.setOnClickListener {
             val taskText = editTextTask.text.toString()
             if (taskText.isNotEmpty()) {
                 val newTask = Task(title = taskText)
-                taskList.add(newTask)
-                adapter.notifyDataSetChanged()
-                editTextTask.text.clear()
-                saveTasks(taskList)
-                
-                // 追加した後に更新
-                updateEmptyMessageVisibility(taskList, textViewEmptyMessage)
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        taskDao.insertTask(newTask)
+                    }
+                    loadTasksFromRoom(textViewEmptyMessage)
+                    editTextTask.text.clear()
+                }
             } else {
                 Toast.makeText(this, "タスクを入力してください", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    /**
-     * リストが空かどうかでメッセージの表示を切り替える
-     */
-    private fun updateEmptyMessageVisibility(taskList: List<Task>, emptyView: View) {
-        if (taskList.isEmpty()) {
-            emptyView.visibility = View.VISIBLE // 表示する
-        } else {
-            emptyView.visibility = View.GONE    // 跡形もなく消す
+    private fun updateTaskInRoom(task: Task) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                taskDao.updateTask(task)
+            }
         }
     }
 
-    private fun showDeleteDialog(position: Int, taskList: MutableList<Task>, adapter: RecyclerView.Adapter<*>, emptyView: View) {
+    private fun loadTasksFromRoom(emptyView: TextView) {
+        lifecycleScope.launch {
+            val tasksFromDb = withContext(Dispatchers.IO) {
+                taskDao.getAllTasks()
+            }
+            taskList.clear()
+            taskList.addAll(tasksFromDb)
+            adapter.notifyDataSetChanged()
+            updateEmptyMessageVisibility(taskList, emptyView)
+        }
+    }
+
+    private fun updateEmptyMessageVisibility(taskList: List<Task>, emptyView: View) {
+        emptyView.visibility = if (taskList.isEmpty()) View.VISIBLE else View.GONE
+    }
+
+    /**
+     * Roomからタスクを削除する
+     */
+    private fun showDeleteDialog(task: Task, emptyView: TextView) {
         AlertDialog.Builder(this)
             .setTitle("削除の確認")
-            .setMessage("このタスクを削除しますか？")
+            .setMessage("「${task.title}」を削除しますか？")
             .setPositiveButton("はい") { _, _ ->
-                taskList.removeAt(position)
-                adapter.notifyDataSetChanged()
-                saveTasks(taskList)
-                
-                // 削除した後に更新
-                updateEmptyMessageVisibility(taskList, emptyView)
-
-                Toast.makeText(this, "削除しました", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        // データベースから削除
+                        taskDao.deleteTask(task)
+                    }
+                    // 削除が終わったら一覧を再読み込み
+                    loadTasksFromRoom(emptyView)
+                    Toast.makeText(this@MainActivity, "削除しました", Toast.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton("いいえ", null)
             .show()
-    }
-
-    private fun saveTasks(taskList: List<Task>) {
-        val prefs = getSharedPreferences("TodayMemoPrefs", MODE_PRIVATE)
-        val json = Gson().toJson(taskList)
-        prefs.edit().putString("tasks_json", json).apply()
-    }
-
-    private fun loadTasks(): MutableList<Task> {
-        val prefs = getSharedPreferences("TodayMemoPrefs", MODE_PRIVATE)
-        val json = prefs.getString("tasks_json", null) ?: return mutableListOf()
-        val type = object : TypeToken<List<Task>>() {}.type
-        return Gson().fromJson(json, type)
     }
 }

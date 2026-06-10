@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TaskAdapter(
     private val taskList: List<Task>,
-    private val onStatusChanged: () -> Unit,      // 保存用の合図
-    private val onItemLongClicked: (Int) -> Unit // 削除用の合図
+    private val onStatusChanged: (Task) -> Unit,
+    private val onItemLongClicked: (Task) -> Unit // 番号ではなくTask本体を渡すように変更
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -30,30 +30,25 @@ class TaskAdapter(
         val task = taskList[position]
         holder.textViewTaskTitle.text = task.title
         
-        // チェック状態の反映
-        holder.checkBoxDone.setOnCheckedChangeListener(null) // リスナーの混線を防ぐ
+        holder.checkBoxDone.setOnCheckedChangeListener(null)
         holder.checkBoxDone.isChecked = task.isCompleted
-
-        // 見た目の更新
         updateTextStyle(holder.textViewTaskTitle, task.isCompleted)
 
-        // チェックを切り替えた時の動作
         holder.checkBoxDone.setOnCheckedChangeListener { _, isChecked ->
             task.isCompleted = isChecked
             updateTextStyle(holder.textViewTaskTitle, isChecked)
-            onStatusChanged() // 保存してね！と合図を送る
+            onStatusChanged(task)
         }
 
-        // 長押しした時の動作
         holder.itemView.setOnLongClickListener {
-            onItemLongClicked(holder.adapterPosition) // この番号を消してね！と合図を送る
+            // 【Room移行ポイント】長押しされたタスク本体を渡す
+            onItemLongClicked(task)
             true
         }
     }
 
     override fun getItemCount(): Int = taskList.size
 
-    // 見た目を更新する共通関数
     private fun updateTextStyle(textView: TextView, isCompleted: Boolean) {
         if (isCompleted) {
             textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
