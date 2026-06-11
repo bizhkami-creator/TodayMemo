@@ -1,418 +1,100 @@
 # 今日やることメモアプリ 開発計画（2週間）
 
 ## 目的
-
-Androidアプリ開発の基礎を学ぶ。
+Androidアプリ開発の基礎を網羅的に習得する。
 
 学習対象
-
-* Kotlin
-* Jetpack Compose
-* ViewModel
-* Room Database
-* Git/GitHub
-* AI活用開発フロー
+* Kotlin / Coroutines
+* XML Layout (ConstraintLayout, CardView, Material Design)
+* RecyclerView (Adapter, ViewHolder)
+* Room Database (Entity, DAO, Singleton)
+* MVVM Architecture (ViewModel, Repository, Factory)
+* Git/GitHub / AI活用開発フロー (Vibe Coding)
 
 ---
 
-## Day1 環境準備
-
+## Day1 - Day2：プロジェクト開始と基本UI
 - [x] Android Studioプロジェクト作成
-- [x] GitHubリポジトリ作成
-- [x] 初回Push
-- [x] フォルダ構成確認
+- [x] タイトル表示 (`TextView`)
+- [x] 入力欄 (`EditText`) と追加ボタン (`Button`) の配置
+- [x] ボタン押下でメモリ上のリスト (`ArrayList<String>`) に追加
+- [x] 初期の `ListView` による一覧表示実装
 
 学んだこと
-- MainActivity.kt が処理担当
-- activity_main.xml が画面担当
-
+* ActivityとXMLレイアウトの紐付け (`setContentView`, `findViewById`)
+* 基本的なイベントリスナー (`setOnClickListener`)
 
 ---
 
-## Day2 Compose基礎
-
-- [x] タイトル表示
-- [x] 入力欄（EditText）追加
-- [x] 追加ボタン作成
-- [x] タスク一覧表示
-- [x] ボタン押下で一覧に追加
-- [x] VSCでのGit管理方法を理解
+## Day3 - Day4：データの永続化基礎
+- [x] `SharedPreferences` の学習と導入
+- [x] `Gson` ライブラリによるオブジェクト ⇄ JSON変換の実装
+- [x] 起動時の自動読み込みと更新時の自動保存
 
 学んだこと
-- EditTextで文字入力を受け取れる
-- Buttonにクリックイベントを設定できる
-- ListView（またはRecyclerView）にデータを表示できる
-- KotlinコードとXMLレイアウトが連携して動く
-
-Git Commit
-- Add basic todo input screen
-
+* メモリ（揮発性）とストレージ（非揮発性）の違い
+* データのシリアライズ（JSON化）による複雑なデータの保存方法
 
 ---
 
-## Day3 一覧表示
-
-### 作業
-
-* List作成
-* LazyColumn表示
-
-### 成果
-
-```text
-□ 月次決算
-□ メール返信
-```
-
-### 学習内容
-
-* List
-* LazyColumn
-
----
-
-## Day4
-
-- [x] SharedPreferences学習
-- [x] タスク保存
-- [x] タスク読み込み
-- [x] アプリ再起動後も保持
+## Day5 - Day6：モダンなリスト表示への進化
+- [x] `Task` クラス（Entity）の作成
+- [x] `ListView` から `RecyclerView` に完全移行
+- [x] 1行分のカスタムレイアウト (`item_task.xml`) 作成
+- [x] `ViewHolder` パターンの実装による描画の最適化
+- [x] 完了チェックボックスの状態管理と取り消し線の動的表示
 
 学んだこと
-- ArrayListはメモリ上の一時データ
-- SharedPreferencesは端末内保存
-- 起動時に読み込みが必要
-- データ変更時に保存が必要
-- 
----
-
-## Day5
-
-### 実施内容
-- [x] Taskクラスを作成
-- [x] ArrayList<String> から ArrayList<Task> に変更
-- [x] CheckBoxを表示
-- [x] 完了状態 completed を true / false で管理
-- [x] 完了状態をSharedPreferencesに保存
-- [x] 完了済みタスクに取り消し線を表示
-- [x] 完了済みタスクの文字色を薄くした
-
-### 学んだこと
-- data classで複数の情報をまとめて管理できる
-- Booleanで完了/未完了を表せる
-- CheckBoxで状態を切り替えられる
-- 文字列だけでなくオブジェクトを保存するには工夫が必要
-- Adapterで一覧の見た目を制御できる
-
-### Git履歴
-Commit:
-Add task completion feature
-
-### 次回やること（Day6）
-- ListViewからRecyclerViewへ移行
-- AdapterとViewHolderを学ぶ
+* Viewの再利用（Recycle）によるパフォーマンス向上
+* アダプターパターンの深い理解
+* ビット演算による `Paint` フラグの操作
 
 ---
 
-## Day6
+## Day7：Material DesignによるUI改善
+- [x] `MaterialCardView` によるリストのカード化
+- [x] `FloatingActionButton (FAB)` の導入
+- [x] 配色（`colors.xml`）とタイポグラフィの調整
+- [x] `ConstraintLayout` を活用した、キーボードに隠れないレスポンシブレイアウト
+- [x] タスク0件時の「空状態メッセージ」表示制御
 
-### 目標
-ListViewからRecyclerViewへ移行し、Android標準的な一覧表示を学ぶ
-
-### 実施内容
-- [x] RecyclerViewを導入
-- [x] item_task.xmlを作成
-- [x] TaskAdapter.ktを作成
-- [x] ViewHolderを実装
-- [x] RecyclerViewとAdapterを接続
-- [x] タスク追加機能を移植
-- [x] CheckBox機能を移植
-- [x] 完了状態の保存機能を移植
-- [x] 完了済みタスクの見た目変更を移植
-- [x] 長押し削除機能を移植
-- [x] SharedPreferences保存との連携確認
-
-### 学んだこと
-
-#### RecyclerView
-- Androidで標準的に使われる一覧表示コンポーネント
-- ListViewより柔軟で高速
-- 大量データでも効率よく表示できる
-
-#### Adapter
-- データと画面表示をつなぐ役割
-- TaskデータをRecyclerViewへ表示する
-- データ変更時は `notifyDataSetChanged()` などで更新する
-
-#### ViewHolder
-- CheckBoxやTextViewなどのViewを保持する仕組み
-- `findViewById()` の呼び出し回数を減らし高速化できる
-- RecyclerViewのパフォーマンス向上に重要
-
-#### 責務分離
-- TaskAdapter
-  - 画面表示
-  - CheckBox状態変更
-  - 長押しイベント通知
-- MainActivity
-  - データ管理
-  - SharedPreferences保存
-  - 削除ダイアログ表示
-
-#### リファクタリング
-- 機能を変えずに内部構造を改善すること
-- 今回は見た目は同じままListViewからRecyclerViewへ変更した
-
-### 困ったこと
-- RecyclerViewとAdapterの関係が最初理解しづらかった
-- ViewHolderの役割が分かりにくかった
-- ListView時代のコードをどこへ移植するか迷った
-
-### 動作確認
-- [x] タスク追加
-- [x] タスク削除
-- [x] チェック状態変更
-- [x] 完了タスクの取り消し線
-- [x] SharedPreferences保存
-- [x] アプリ再起動後の復元
-
-### Git履歴
-
-Commit:
-Migrate Todo app from ListView to RecyclerView
+学んだこと
+* Material Components ライブラリの使い方
+* ユーザー体験（UX）を考慮したレイアウト設計
 
 ---
 
-## Day7
+## Day8 - Day9：本格データベース（Room）への移行
+- [x] `Room Database` の導入と KSP 設定
+- [x] `Entity`, `DAO`, `AppDatabase` (シングルトン) の実装
+- [x] `Coroutines` (`lifecycleScope`, `Dispatchers.IO`) による非同期処理
+- [x] `SharedPreferences` から `Room` への完全なデータ移行
 
-### 目標
-Material Design風のUIへ改善する
-
-### 実施内容
-- [x] CardView化
-- [x] FAB導入
-- [x] カラー調整
-- [x] アイコン調整
-- [x] 空状態メッセージ追加
-- [x] FABレイアウト不具合修正
-
-### 学んだこと
-
-#### CardView
-- タスクをカード形式で表示できる
-- Material Designらしい見た目になる
-
-#### Floating Action Button
-- 主要アクションを強調できる
-- Androidアプリでよく使われるUI
-
-#### レイアウト調整
-- View同士の重なりに注意する
-- RecyclerViewには余白設定が重要
-
-#### Empty State
-- データがない時の画面設計も重要
-- ユーザーに現在の状態を伝えられる
-
-### Git履歴
-
-Commit:
-Improve UI with CardView and FAB
-
-### 次回やること（Day8）
-- Room Database導入
-- SharedPreferencesとの違いを学ぶ
-- Entity作成
-- DAO作成
-- Database作成
-- 
----
-
-## Day8
-
-### 目標
-
-Room Databaseを学ぶ
-
-### 実施内容
-
-* [x] Room概要理解
-* [x] Entity作成
-* [x] DAO作成
-* [x] Database作成
-
-### 学ぶこと
-
-* SQLite
-* Room
-* Entity
-* DAO
-
-### Git Commit
-
-* Add Room Database setup
+学んだこと
+* リレーショナルデータベースの基礎（SQL, 主キー, CRUD）
+* メインスレッドを止めない非同期プログラミングの重要性
 
 ---
 
-## Day9
+## Day10：MVVMアーキテクチャの導入
+- [x] `TaskRepository` によるデータアクセス層の分離
+- [x] `TaskViewModel` によるビジネスロジックの集約
+- [x] `TaskViewModelFactory` による引数付きViewModelの生成
+- [x] `MainActivity` からのロジック排除（表示への専念）
 
-### 目標
-
-SharedPreferencesからRoomへ移行する
-
-### 実施内容
-
-* [x] タスク保存をRoom化
-* [x] タスク読込をRoom化
-* [x] タスク更新（チェック状態）をRoom化
-* [x] タスク削除をRoom化
-* [x] 動作確認
-
-### 学ぶこと
-
-* CRUD (Create, Read, Update, Delete) 操作
-* Coroutinesによる非同期処理 (`lifecycleScope`, `Dispatchers.IO`)
-* SharedPreferencesからの完全移行とコード整理
-
-### Git Commit
-
-* Migrate persistence to Room
+学んだこと
+* MVVM（Model-View-ViewModel）による関心の分離
+* ViewModelのライフサイクル（画面回転への耐性）
+* ボイラープレートコード（Factory）の必要性
 
 ---
 
-## Day10
-
-### 目標
-
-アーキテクチャを学ぶ
-
-### 実施内容
-
-* [x] Repository作成
-* [x] ViewModel導入
-* [x] ViewModelFactory導入
-* [x] MainActivityからロジックを分離
-
-### 学ぶこと
-
-* MVVM (Model-View-ViewModel)
-* ViewModelの役割とライフサイクル
-* Repository Patternによるデータアクセスの隠蔽
-* FactoryクラスによるViewModelの生成
-
-### Git Commit
-
-* Introduce MVVM architecture
+## Day11：LiveDataによるリアクティブUI（次回予定）
+- [ ] `LiveData` または `StateFlow` の導入
+- [ ] データベース変更時の自動画面更新
+- [ ] `loadTasks` の手動呼び出しを廃止
 
 ---
 
-## Day11
-
-### 目標
-
-検索機能を追加する
-
-### 実施内容
-
-* [ ] 検索欄追加
-* [ ] リアルタイム検索
-* [ ] フィルタリング
-
-### 学ぶこと
-
-* SearchView
-* List Filtering
-
-### Git Commit
-
-* Add search functionality
-
----
-
-## Day12
-
-### 目標
-
-並び替え機能を追加する
-
-### 実施内容
-
-* [ ] 作成順
-* [ ] 完了順
-* [ ] 名前順
-
-### 学ぶこと
-
-* Comparator
-* ソート処理
-
-### Git Commit
-
-* Add sorting options
-
----
-
-## Day13
-
-### 目標
-
-リファクタリングを行う
-
-### 実施内容
-
-* [ ] 不要コード削除
-* [ ] コメント整理
-* [ ] 命名統一
-* [ ] フォルダ構成整理
-
-### 学ぶこと
-
-* リファクタリング
-* 保守性向上
-
-### Git Commit
-
-* Refactor project structure
-
----
-
-## Day14
-
-### 目標
-
-プロジェクトを完成させる
-
-### 実施内容
-
-* [ ] 最終テスト
-* [ ] README作成
-* [ ] スクリーンショット取得
-* [ ] GitHub整理
-
-### 学ぶこと
-
-* リリース準備
-* ドキュメント作成
-
-### Git Commit
-
-* Release v1.0
-
----
-
-## このTodoアプリで習得する技術
-
-* Kotlin基礎
-* Activity
-* Layout XML
-* Event処理
-* ListView
-* RecyclerView
-* SharedPreferences
-* Room Database
-* MVVM
-* Git
-* GitHub
-* Material Design
-* Android Studio
-* Geminiを使ったVibe Coding
+## 現時点での達成度
+Day 1 から Day 10 まで、計画通り完了しました。アプリは「単に動くもの」から「プロ仕様の設計を持つモダンなアプリ」へと進化しています。
