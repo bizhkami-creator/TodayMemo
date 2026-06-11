@@ -9,27 +9,27 @@
 - **完了チェック**: チェックボックスをタップすることで、タスクの完了/未完了を切り替えられる。
 - **タスク削除**: タスクを長押しすることで、確認ダイアログを表示した後に削除できる。
 - **データの永続化**: アプリを終了しても、タスクの内容と完了状態が保存され、次回起動時に復元される。
-- **空状態の通知**: タスクが1件もない場合、ユーザーに「やることはありません」というメッセージを表示する。
+- **空状態の通知**: タスクが1件もない場合、ユーザーに「今日やることはありません！」というメッセージを表示する。
 
 ## 3. UI/UX要件 (UI/UX Requirements)
 - **Material Design**: Googleのマテリアルデザインガイドラインに準拠したモダンな見た目。
 - **CardView**: 各タスクを立体感のあるカード形式で表示し、視認性を高める。
-- **Floating Action Button (FAB)**: 最も重要な操作である「追加」を、目立つ丸いボタンで配置。
+- **Floating Action Button (FAB)**: 最も重要な操作である「追加」を、入力欄の横に配置（キーボードを考慮）。
 - **視覚的フィードバック**:
     - 完了済みタスクには「取り消し線」を引き、文字色をグレーに変更する。
     - 削除前には必ず確認ダイアログを表示し、誤操作を防止する。
-- **レスポンシブな配置**: キーボードが表示されても、入力欄や追加ボタンが隠れないように画面上部に固定する。
 
 ## 4. 技術スタック (Technical Stack)
 - **言語**: Kotlin
+- **アーキテクチャ**: MVVM (Model-View-ViewModel) + Repository Pattern
 - **UI フレームワーク**: XML (View-based)
-- **レイアウト**: ConstraintLayout, LinearLayout, MaterialCardView
-- **リスト表示**: RecyclerView (ViewHolder パターン採用)
-- **データ保存**: SharedPreferences + Gson (JSON形式)
+- **非同期処理**: Kotlin Coroutines
+- **データ保存**: Room Database (SQLite)
 - **ライブラリ**: 
     - `com.google.android.material:material` (UI部品)
-    - `com.google.code.gson:gson` (データ変換)
+    - `androidx.room:room-runtime` (データベース)
+    - `androidx.lifecycle:lifecycle-viewmodel-ktx` (アーキテクチャ)
 
 ## 5. ターゲット・コンセプト
 - **ターゲット**: Androidアプリ開発の基礎を学びたい初心者、およびシンプルなメモ帳を求めるユーザー。
-- **コンセプト**: 「迷わない操作感」と「読みやすいコード構造」。
+- **コンセプト**: 「迷わない操作感」と「堅牢で保守性の高いコード構造（MVVM）」。

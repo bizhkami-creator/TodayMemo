@@ -288,15 +288,17 @@ SharedPreferencesからRoomへ移行する
 
 ### 実施内容
 
-* [ ] Repository作成
-* [ ] ViewModel導入
-* [ ] データ管理整理
+* [x] Repository作成
+* [x] ViewModel導入
+* [x] ViewModelFactory導入
+* [x] MainActivityからロジックを分離
 
 ### 学ぶこと
 
-* MVVM
-* ViewModel
-* Repository Pattern
+* MVVM (Model-View-ViewModel)
+* ViewModelの役割とライフサイクル
+* Repository Patternによるデータアクセスの隠蔽
+* FactoryクラスによるViewModelの生成
 
 ### Git Commit
 
