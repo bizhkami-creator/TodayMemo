@@ -19,42 +19,60 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- 2. 入力欄 (タイトルの下、FABの左側まで広がる) -->
+    <!-- 2. 検索バー (追加：タイトルの下に配置) -->
     <EditText
-        android:id="@+id/editTextTask"
+        android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:hint="新しいタスクを入力..."
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
-        app:layout_constraintBottom_toBottomOf="@id/fabAdd"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/fabAdd" />
-
-    <!-- 3. FAB (入力欄の右側に配置、浮かせる) -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/purple_500"
-        app:tint="@color/white"
-        app:elevation="4dp"
-        app:fabSize="mini"
-        android:contentDescription="追加"
-        app:layout_constraintTop_toTopOf="@id/editTextTask"
+        android:hint="タスクを検索..."
+        android:inputType="text"
+        android:padding="12dp"
+        android:background="@android:drawable/edit_text"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 4. リスト表示 (入力エリアの下から画面下端まで) -->
+    <!-- 3. 入力エリア (検索バーの下に移動) -->
+    <LinearLayout
+        android:id="@+id/layoutInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/editTextSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/editTextTask"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="新しいタスクを入力..."
+            android:inputType="text" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:fabSize="mini"
+            app:srcCompat="@android:drawable/ic_input_add"
+            app:backgroundTint="@color/purple_500"
+            app:tint="@color/white"
+            android:contentDescription="追加" />
+    </LinearLayout>
+
+    <!-- 4. リスト表示 (入力エリアの下) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/fabAdd"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutInput"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

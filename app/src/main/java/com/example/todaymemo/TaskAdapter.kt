@@ -10,10 +10,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class TaskAdapter(
-    private val taskList: List<Task>,
+    private var originalTasks: List<Task>, // 全データ
     private val onStatusChanged: (Task) -> Unit,
-    private val onItemLongClicked: (Task) -> Unit // 番号ではなくTask本体を渡すように変更
+    private val onItemLongClicked: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+
+    // 実際に画面に表示するリスト（最初は全データをコピー）
+    private var filteredTasks: List<Task> = originalTasks
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val checkBoxDone: CheckBox = view.findViewById(R.id.checkBoxDone)
@@ -27,7 +30,8 @@ class TaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = taskList[position]
+        // 表示用リスト(filteredTasks)からデータを取得する
+        val task = filteredTasks[position]
         holder.textViewTaskTitle.text = task.title
         
         holder.checkBoxDone.setOnCheckedChangeListener(null)
@@ -41,13 +45,37 @@ class TaskAdapter(
         }
 
         holder.itemView.setOnLongClickListener {
-            // 【Room移行ポイント】長押しされたタスク本体を渡す
             onItemLongClicked(task)
             true
         }
     }
 
-    override fun getItemCount(): Int = taskList.size
+    // 表示用リストの件数を返す
+    override fun getItemCount(): Int = filteredTasks.size
+
+    /**
+     * リスト全体を更新する（データベースからの読み込み時に使う）
+     */
+    fun updateData(newTasks: List<Task>) {
+        originalTasks = newTasks
+        filteredTasks = newTasks
+        notifyDataSetChanged()
+    }
+
+    /**
+     * 検索ワードでリストを絞り込む
+     */
+    fun filter(query: String) {
+        filteredTasks = if (query.isEmpty()) {
+            originalTasks // 空なら全件表示
+        } else {
+            // 文字列が含まれるものだけ抽出（大文字小文字を区別しない）
+            originalTasks.filter { 
+                it.title.contains(query, ignoreCase = true) 
+            }
+        }
+        notifyDataSetChanged() // 画面を更新！
+    }
 
     private fun updateTextStyle(textView: TextView, isCompleted: Boolean) {
         if (isCompleted) {

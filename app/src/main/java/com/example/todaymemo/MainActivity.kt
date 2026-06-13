@@ -1,6 +1,8 @@
 package com.example.todaymemo
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -19,29 +21,28 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: TaskViewModel
-    private val taskList = mutableListOf<Task>()
     private lateinit var adapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 1. ViewModelの準備 (製造機を通して作成)
         val taskDao = AppDatabase.getDatabase(this).taskDao()
         val repository = TaskRepository(taskDao)
         val factory = TaskViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(TaskViewModel::class.java)
 
+        val editTextSearch = findViewById<EditText>(R.id.editTextSearch)
         val editTextTask = findViewById<EditText>(R.id.editTextTask)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
         val recyclerViewTasks = findViewById<RecyclerView>(R.id.recyclerViewTasks)
         val textViewEmptyMessage = findViewById<TextView>(R.id.textViewEmptyMessage)
 
-        // 2. アダプターの設定 (イベントをViewModelに伝える)
+        // 1. アダプターを初期化 (最初は空のリスト)
         adapter = TaskAdapter(
-            taskList,
+            emptyList(),
             onStatusChanged = { updatedTask -> 
-                viewModel.updateTask(updatedTask) // ViewModelにお願い
+                viewModel.updateTask(updatedTask)
             },
             onItemLongClicked = { taskToDelete ->
                 showDeleteDialog(taskToDelete, textViewEmptyMessage)
@@ -51,17 +52,26 @@ class MainActivity : AppCompatActivity() {
         recyclerViewTasks.adapter = adapter
         recyclerViewTasks.layoutManager = LinearLayoutManager(this)
 
-        // 3. 起動時にタスクを読み込む
+        // 2. 検索窓の文字入力を監視する
+        editTextSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // 文字が入力されるたびにアダプターのフィルタを呼ぶ
+                adapter.filter(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         loadTasks(textViewEmptyMessage)
 
-        // 4. 追加ボタンの動作
         fabAdd.setOnClickListener {
             val taskText = editTextTask.text.toString()
             if (taskText.isNotEmpty()) {
                 viewModel.addTask(taskText) {
-                    // 追加が終わった後の処理
                     loadTasks(textViewEmptyMessage)
                     editTextTask.text.clear()
+                    // 追加後に検索ワードをクリアして全件表示に戻す
+                    editTextSearch.text.clear()
                 }
             } else {
                 Toast.makeText(this, "タスクを入力してください", Toast.LENGTH_SHORT).show()
@@ -69,20 +79,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * データの読み込み (MVVM化の暫定対応：後でLiveDataでさらに改善できます)
-     */
     private fun loadTasks(emptyView: TextView) {
-        // まだ暫定的にActivityで呼び出していますが、処理自体はViewModelに移せます
         lifecycleScope.launch {
             val tasks = withContext(Dispatchers.IO) {
-                // ここも本来は ViewModel に持たせるのがベストです
                 AppDatabase.getDatabase(this@MainActivity).taskDao().getAllTasks()
             }
-            taskList.clear()
-            taskList.addAll(tasks)
-            adapter.notifyDataSetChanged()
-            updateEmptyMessageVisibility(taskList, emptyView)
+            // 【変更】リストを直接いじらず、アダプターの更新関数を呼ぶ
+            adapter.updateData(tasks)
+            updateEmptyMessageVisibility(tasks, emptyView)
         }
     }
 
@@ -96,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             .setMessage("「${task.title}」を削除しますか？")
             .setPositiveButton("はい") { _, _ ->
                 viewModel.deleteTask(task) {
-                    loadTasks(emptyView) // 削除が終わったら再読み込み
+                    loadTasks(emptyView)
                     Toast.makeText(this@MainActivity, "削除しました", Toast.LENGTH_SHORT).show()
                 }
             }
