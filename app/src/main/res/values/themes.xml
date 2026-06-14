@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- MaterialCardView を使うために Theme.MaterialComponents に変更 -->
-    <style name="Theme.TodayMemo" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <!-- DarkActionBar から NoActionBar に変更して、アプリ標準の帯を消します -->
+    <style name="Theme.TodayMemo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- プライマリーカラーの設定 -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryDark">@color/purple_700</item>

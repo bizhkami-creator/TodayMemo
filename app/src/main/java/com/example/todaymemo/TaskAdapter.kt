@@ -10,13 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class TaskAdapter(
-    private var originalTasks: List<Task>, // 全データ
+    private var originalTasks: List<Task>,
     private val onStatusChanged: (Task) -> Unit,
     private val onItemLongClicked: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
-    // 実際に画面に表示するリスト（最初は全データをコピー）
     private var filteredTasks: List<Task> = originalTasks
+    private var currentQuery: String = "" // 現在の検索ワードを保持
+    private var currentSortType: Int = 0 // 0: 作成順, 1: 名前順, 2: 完了順
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val checkBoxDone: CheckBox = view.findViewById(R.id.checkBoxDone)
@@ -30,7 +31,6 @@ class TaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        // 表示用リスト(filteredTasks)からデータを取得する
         val task = filteredTasks[position]
         holder.textViewTaskTitle.text = task.title
         
@@ -42,6 +42,8 @@ class TaskAdapter(
             task.isCompleted = isChecked
             updateTextStyle(holder.textViewTaskTitle, isChecked)
             onStatusChanged(task)
+            // チェック状態が変わったときも、現在のルールで並び替え直す
+            applyFilterAndSort()
         }
 
         holder.itemView.setOnLongClickListener {
@@ -50,31 +52,49 @@ class TaskAdapter(
         }
     }
 
-    // 表示用リストの件数を返す
     override fun getItemCount(): Int = filteredTasks.size
 
-    /**
-     * リスト全体を更新する（データベースからの読み込み時に使う）
-     */
     fun updateData(newTasks: List<Task>) {
         originalTasks = newTasks
-        filteredTasks = newTasks
-        notifyDataSetChanged()
+        applyFilterAndSort() // データを更新した時もフィルタとソートを適用
     }
 
     /**
-     * 検索ワードでリストを絞り込む
+     * 検索ワードを設定する
      */
     fun filter(query: String) {
-        filteredTasks = if (query.isEmpty()) {
-            originalTasks // 空なら全件表示
+        currentQuery = query
+        applyFilterAndSort()
+    }
+
+    /**
+     * 並び替えルールを設定する
+     */
+    fun sortTasks(sortType: Int) {
+        currentSortType = sortType
+        applyFilterAndSort()
+    }
+
+    /**
+     * 検索と並び替えをまとめて実行する心臓部の関数
+     */
+    private fun applyFilterAndSort() {
+        // 1. まずは検索フィルタをかける
+        var result = if (currentQuery.isEmpty()) {
+            originalTasks
         } else {
-            // 文字列が含まれるものだけ抽出（大文字小文字を区別しない）
-            originalTasks.filter { 
-                it.title.contains(query, ignoreCase = true) 
-            }
+            originalTasks.filter { it.title.contains(currentQuery, ignoreCase = true) }
         }
-        notifyDataSetChanged() // 画面を更新！
+
+        // 2. 次に並び替えを適用する
+        result = when (currentSortType) {
+            1 -> result.sortedBy { it.title } // 名前順
+            2 -> result.sortedBy { it.isCompleted } // 完了順（false=0, true=1 なので未完了が先）
+            else -> result.sortedByDescending { it.id } // デフォルト：作成順（IDが大きい順）
+        }
+
+        filteredTasks = result
+        notifyDataSetChanged()
     }
 
     private fun updateTextStyle(textView: TextView, isCompleted: Boolean) {

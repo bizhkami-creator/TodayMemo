@@ -19,7 +19,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- 2. 検索バー (追加：タイトルの下に配置) -->
+    <!-- 2. 並び替えSpinner (ImageButtonから変更) -->
+    <Spinner
+        android:id="@+id/spinnerSort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/sort_options"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textViewTitle"
+        app:layout_constraintBottom_toBottomOf="@id/textViewTitle" />
+
+    <!-- 3. 検索バー -->
     <EditText
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
@@ -34,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 3. 入力エリア (検索バーの下に移動) -->
+    <!-- 4. 入力エリア -->
     <LinearLayout
         android:id="@+id/layoutInput"
         android:layout_width="0dp"
@@ -66,7 +76,7 @@
             android:contentDescription="追加" />
     </LinearLayout>
 
-    <!-- 4. リスト表示 (入力エリアの下) -->
+    <!-- 5. リスト表示 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
         android:layout_width="0dp"
@@ -77,7 +87,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 5. 空状態メッセージ -->
+    <!-- 6. 空状態メッセージ -->
     <TextView
         android:id="@+id/textViewEmptyMessage"
         android:layout_width="wrap_content"

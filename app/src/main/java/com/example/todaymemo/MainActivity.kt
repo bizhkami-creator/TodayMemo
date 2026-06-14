@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.AdapterView
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -32,13 +34,13 @@ class MainActivity : AppCompatActivity() {
         val factory = TaskViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(TaskViewModel::class.java)
 
+        val spinnerSort = findViewById<Spinner>(R.id.spinnerSort)
         val editTextSearch = findViewById<EditText>(R.id.editTextSearch)
         val editTextTask = findViewById<EditText>(R.id.editTextTask)
         val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
         val recyclerViewTasks = findViewById<RecyclerView>(R.id.recyclerViewTasks)
         val textViewEmptyMessage = findViewById<TextView>(R.id.textViewEmptyMessage)
 
-        // 1. アダプターを初期化 (最初は空のリスト)
         adapter = TaskAdapter(
             emptyList(),
             onStatusChanged = { updatedTask -> 
@@ -52,11 +54,19 @@ class MainActivity : AppCompatActivity() {
         recyclerViewTasks.adapter = adapter
         recyclerViewTasks.layoutManager = LinearLayoutManager(this)
 
-        // 2. 検索窓の文字入力を監視する
+        // 1. Spinnerの選択イベントをアダプターに伝える
+        spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // 選ばれた並び替え条件（0:作成順, 1:名前順, 2:完了順）を反映
+                adapter.sortTasks(position)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // 2. 検索窓の入力をアダプターに伝える
         editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // 文字が入力されるたびにアダプターのフィルタを呼ぶ
                 adapter.filter(s.toString())
             }
             override fun afterTextChanged(s: Editable?) {}
@@ -70,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.addTask(taskText) {
                     loadTasks(textViewEmptyMessage)
                     editTextTask.text.clear()
-                    // 追加後に検索ワードをクリアして全件表示に戻す
+                    // 【ポイント】追加後も検索窓をクリアするだけで、並び替え条件は維持されます
                     editTextSearch.text.clear()
                 }
             } else {
@@ -84,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             val tasks = withContext(Dispatchers.IO) {
                 AppDatabase.getDatabase(this@MainActivity).taskDao().getAllTasks()
             }
-            // 【変更】リストを直接いじらず、アダプターの更新関数を呼ぶ
+            // 新しいデータを渡しても、アダプター側で現在のソート・フィルタが自動適用されます
             adapter.updateData(tasks)
             updateEmptyMessageVisibility(tasks, emptyView)
         }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TodayMemo</string>
+    <string-array name="sort_options">
+        <item>作成順</item>
+        <item>名前順</item>
+        <item>完了状態順</item>
+    </string-array>
 </resources>
