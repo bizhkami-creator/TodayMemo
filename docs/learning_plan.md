@@ -40,7 +40,7 @@ Androidアプリ開発の基礎を網羅的に習得する。
 ## Day7：Material DesignによるUI改善
 - [x] `MaterialCardView` によるリストのカード化
 - [x] `FloatingActionButton (FAB)` の導入
-- [x] `ConstraintLayout` を活用した、キーボードに隠れないレスポシブレイアウト
+- [x] 配色調整とレスポシブレイアウトの実装
 - [x] タスク0件時の「空状態メッセージ」表示制御
 
 ---
@@ -48,7 +48,7 @@ Androidアプリ開発の基礎を網羅的に習得する。
 ## Day8 - Day9：本格データベース（Room）への移行
 - [x] `Room Database` の導入と KSP 設定
 - [x] `Entity`, `DAO`, `AppDatabase` (シングルトン) の実装
-- [x] `Coroutines` (`lifecycleScope`, `Dispatchers.IO`) による非同期処理
+- [x] `Coroutines` による非同期処理
 - [x] `SharedPreferences` から `Room` への完全なデータ移行
 
 ---
@@ -61,38 +61,26 @@ Androidアプリ開発の基礎を網羅的に習得する。
 
 ---
 
-## Day11：検索機能の追加
-- [x] 検索用 `EditText` の配置
-- [x] アダプター内でのフィルタリングロジック（`originalTasks` / `filteredTasks`）
-- [x] `TextWatcher` によるリアルタイム検索の実装
-
----
-
-## Day12：並び替え機能の実装
-- [x] `Spinner` による並び替えUIの追加
-- [x] 「作成順」「名前順」「完了状態順」のソートロジック実装
-- [x] 検索と並び替えの統合 (`applyFilterAndSort`)
+## Day11 - Day12：検索と並び替えの高度な統合
+- [x] リアルタイム検索フィルタの実装
+- [x] `Spinner` による動的ソート（作成順・名前順・完了順）の実装
+- [x] 検索とソートのロジック統合 (`applyFilterAndSort`)
 
 ---
 
 ## Day13：リファクタリングとリアクティブUI
-- [x] `LiveData` の導入によるデータの自動同期（監視）実装
-- [x] `Gson` や古いコメント、未使用 `import` の完全削除
-- [x] 全メッセージ・色のリソース化 (`strings.xml`, `colors.xml`)
-- [x] ビルド不具合（KSPとKotlinバージョンの競合）の解消
-
-学んだこと
-* LiveDataによる「変更の自動検知」と画面更新の自動化
-* ハードコードを避けることによるメンテナンス性の向上
-* KSP/Kotlinなどの開発ツールの依存関係トラブルへの対処法
+- [x] `LiveData` によるデータの自動同期（監視）実装
+- [x] コードの徹底的なクリーンアップとリソース化 (`strings.xml`, `colors.xml`)
 
 ---
 
-## Day14：プロジェクトを完成させる（次回予定）
-- [ ] 最終動作確認
-- [ ] プロジェクト成果物のまとめ（README作成等）
+## Day14：プロジェクトの完成
+- [x] 最終動作確認とバグ修正
+- [x] README.md の作成（スクリーンショット付き）
+- [x] 開発ログ・要件定義書の最終整理
 
 ---
 
-## 現時点での達成度
-Day 1 から Day 13 まで完了。LiveDataの導入により、モダンなAndroid開発の標準的なスタイルが確立されました。
+## 🏆 最終達成度：100%
+2週間で、初心者からモダンなAndroidアプリ開発を完遂しました。
+本プロジェクトは、Gemini(AI)を活用した「Vibe Coding」の成果物です。
