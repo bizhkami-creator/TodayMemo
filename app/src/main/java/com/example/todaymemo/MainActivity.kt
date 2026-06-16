@@ -12,13 +12,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,11 +25,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // 1. ViewModelと依存関係のセットアップ
         val taskDao = AppDatabase.getDatabase(this).taskDao()
         val repository = TaskRepository(taskDao)
         val factory = TaskViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(TaskViewModel::class.java)
 
+        // 2. UI部品の取得
         val spinnerSort = findViewById<Spinner>(R.id.spinnerSort)
         val editTextSearch = findViewById<EditText>(R.id.editTextSearch)
         val editTextTask = findViewById<EditText>(R.id.editTextTask)
@@ -41,29 +39,35 @@ class MainActivity : AppCompatActivity() {
         val recyclerViewTasks = findViewById<RecyclerView>(R.id.recyclerViewTasks)
         val textViewEmptyMessage = findViewById<TextView>(R.id.textViewEmptyMessage)
 
+        // 3. アダプターの初期化
         adapter = TaskAdapter(
             emptyList(),
             onStatusChanged = { updatedTask -> 
                 viewModel.updateTask(updatedTask)
             },
             onItemLongClicked = { taskToDelete ->
-                showDeleteDialog(taskToDelete, textViewEmptyMessage)
+                showDeleteDialog(taskToDelete)
             }
         )
         
         recyclerViewTasks.adapter = adapter
         recyclerViewTasks.layoutManager = LinearLayoutManager(this)
 
-        // 1. Spinnerの選択イベントをアダプターに伝える
+        // 4. LiveDataの監視（データの自動更新を実現）
+        viewModel.allTasks.observe(this) { tasks ->
+            // DBが更新されたらここが呼ばれる
+            adapter.updateData(tasks)
+            updateEmptyMessageVisibility(tasks, textViewEmptyMessage)
+        }
+
+        // 5. リスナーの設定（検索・並び替え）
         spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // 選ばれた並び替え条件（0:作成順, 1:名前順, 2:完了順）を反映
                 adapter.sortTasks(position)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // 2. 検索窓の入力をアダプターに伝える
         editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -72,31 +76,16 @@ class MainActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        loadTasks(textViewEmptyMessage)
-
+        // 6. タスク追加
         fabAdd.setOnClickListener {
             val taskText = editTextTask.text.toString()
             if (taskText.isNotEmpty()) {
-                viewModel.addTask(taskText) {
-                    loadTasks(textViewEmptyMessage)
-                    editTextTask.text.clear()
-                    // 【ポイント】追加後も検索窓をクリアするだけで、並び替え条件は維持されます
-                    editTextSearch.text.clear()
-                }
+                viewModel.addTask(taskText)
+                editTextTask.text.clear()
+                editTextSearch.text.clear()
             } else {
-                Toast.makeText(this, "タスクを入力してください", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.msg_input_task), Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun loadTasks(emptyView: TextView) {
-        lifecycleScope.launch {
-            val tasks = withContext(Dispatchers.IO) {
-                AppDatabase.getDatabase(this@MainActivity).taskDao().getAllTasks()
-            }
-            // 新しいデータを渡しても、アダプター側で現在のソート・フィルタが自動適用されます
-            adapter.updateData(tasks)
-            updateEmptyMessageVisibility(tasks, emptyView)
         }
     }
 
@@ -104,17 +93,15 @@ class MainActivity : AppCompatActivity() {
         emptyView.visibility = if (taskList.isEmpty()) View.VISIBLE else View.GONE
     }
 
-    private fun showDeleteDialog(task: Task, emptyView: TextView) {
+    private fun showDeleteDialog(task: Task) {
         AlertDialog.Builder(this)
-            .setTitle("削除の確認")
-            .setMessage("「${task.title}」を削除しますか？")
-            .setPositiveButton("はい") { _, _ ->
-                viewModel.deleteTask(task) {
-                    loadTasks(emptyView)
-                    Toast.makeText(this@MainActivity, "削除しました", Toast.LENGTH_SHORT).show()
-                }
+            .setTitle(getString(R.string.dialog_delete_title))
+            .setMessage(getString(R.string.dialog_delete_msg, task.title))
+            .setPositiveButton(getString(R.string.btn_yes)) { _, _ ->
+                viewModel.deleteTask(task)
+                Toast.makeText(this, getString(R.string.msg_deleted), Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("いいえ", null)
+            .setNegativeButton(getString(R.string.btn_no), null)
             .show()
     }
 }

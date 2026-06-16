@@ -1,5 +1,17 @@
 <resources>
     <string name="app_name">TodayMemo</string>
+    <string name="title_today_tasks">今日やること</string>
+    <string name="hint_search_tasks">タスクを検索...</string>
+    <string name="hint_new_task">新しいタスクを入力...</string>
+    <string name="msg_empty_tasks">今日やることはありません！</string>
+    <string name="msg_input_task">タスクを入力してください</string>
+    <string name="msg_deleted">削除しました</string>
+    <string name="dialog_delete_title">削除の確認</string>
+    <string name="dialog_delete_msg">「%s」を削除しますか？</string>
+    <string name="btn_yes">はい</string>
+    <string name="btn_no">いいえ</string>
+    <string name="content_desc_add">追加</string>
+
     <string-array name="sort_options">
         <item>作成順</item>
         <item>名前順</item>

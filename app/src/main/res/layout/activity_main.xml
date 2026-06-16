@@ -12,14 +12,14 @@
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="今日やること"
+        android:text="@string/title_today_tasks"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- 2. 並び替えSpinner (ImageButtonから変更) -->
+    <!-- 2. 並び替えSpinner -->
     <Spinner
         android:id="@+id/spinnerSort"
         android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="タスクを検索..."
+        android:hint="@string/hint_search_tasks"
         android:inputType="text"
         android:padding="12dp"
         android:background="@android:drawable/edit_text"
@@ -61,7 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="新しいタスクを入力..."
+            android:hint="@string/hint_new_task"
             android:inputType="text" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -73,7 +73,7 @@
             app:srcCompat="@android:drawable/ic_input_add"
             app:backgroundTint="@color/purple_500"
             app:tint="@color/white"
-            android:contentDescription="追加" />
+            android:contentDescription="@string/content_desc_add" />
     </LinearLayout>
 
     <!-- 5. リスト表示 -->
@@ -92,7 +92,7 @@
         android:id="@+id/textViewEmptyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="今日やることはありません！"
+        android:text="@string/msg_empty_tasks"
         android:textSize="18sp"
         android:textColor="@color/gray_text"
         android:visibility="gone"

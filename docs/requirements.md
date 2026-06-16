@@ -11,6 +11,7 @@
 - **完了チェック**: チェックボックスをタップすることで、タスクの完了/未完了を切り替えられる。
 - **タスク削除**: タスクを長押しすることで、確認ダイアログを表示した後に削除できる。
 - **データの永続化**: アプリを終了しても、タスクの内容と完了状態が保存され、次回起動時に復元される。
+- **リアクティブ更新**: データベースの変更が即座に画面へ反映される（LiveDataによる自動同期）。
 - **空状態の通知**: タスクが1件もない場合、ユーザーに「今日やることはありません！」というメッセージを表示する。
 
 ## 3. UI/UX要件 (UI/UX Requirements)
@@ -26,13 +27,14 @@
 ## 4. 技術スタック (Technical Stack)
 - **言語**: Kotlin
 - **アーキテクチャ**: MVVM (Model-View-ViewModel) + Repository Pattern
+- **データ監視**: LiveData (Reactive UI)
 - **UI フレームワーク**: XML (View-based)
 - **非同期処理**: Kotlin Coroutines
 - **データ保存**: Room Database (SQLite)
 - **ライブラリ**: 
     - `com.google.android.material:material` (UI部品)
     - `androidx.room:room-runtime` (データベース)
-    - `androidx.lifecycle:lifecycle-viewmodel-ktx` (アーキテクチャ)
+    - `androidx.lifecycle:lifecycle-livedata-ktx` (データ監視)
 
 ## 5. ターゲット・コンセプト
 - **ターゲット**: Androidアプリ開発の基礎を学びたい初心者、およびシンプルなメモ帳を求めるユーザー。

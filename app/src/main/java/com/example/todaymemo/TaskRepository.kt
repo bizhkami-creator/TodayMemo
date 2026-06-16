@@ -1,14 +1,14 @@
 package com.example.todaymemo
 
+import androidx.lifecycle.LiveData
+
 /**
  * データの「調達」と「保存」を管理するクラス
  */
 class TaskRepository(private val taskDao: TaskDao) {
 
-    // すべてのタスクを取得
-    fun getAllTasks(): List<Task> {
-        return taskDao.getAllTasks()
-    }
+    // データベースの全データを監視可能な状態で提供
+    val allTasks: LiveData<List<Task>> = taskDao.getAllTasks()
 
     // タスクを追加
     suspend fun insertTask(task: Task) {

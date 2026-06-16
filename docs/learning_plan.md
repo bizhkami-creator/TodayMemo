@@ -8,7 +8,7 @@ Androidアプリ開発の基礎を網羅的に習得する。
 * XML Layout (ConstraintLayout, CardView, Material Design)
 * RecyclerView (Adapter, ViewHolder)
 * Room Database (Entity, DAO, Singleton)
-* MVVM Architecture (ViewModel, Repository, Factory)
+* MVVM Architecture (ViewModel, Repository, Factory, LiveData)
 * Git/GitHub / AI活用開発フロー (Vibe Coding)
 
 ---
@@ -17,7 +17,6 @@ Androidアプリ開発の基礎を網羅的に習得する。
 - [x] Android Studioプロジェクト作成
 - [x] タイトル表示 (`TextView`)
 - [x] 入力欄 (`EditText`) と追加ボタン (`Button`) の配置
-- [x] ボタン押下でメモリ上のリスト (`ArrayList<String>`) に追加
 - [x] 初期の `ListView` による一覧表示実装
 
 ---
@@ -41,8 +40,7 @@ Androidアプリ開発の基礎を網羅的に習得する。
 ## Day7：Material DesignによるUI改善
 - [x] `MaterialCardView` によるリストのカード化
 - [x] `FloatingActionButton (FAB)` の導入
-- [x] 配色（`colors.xml`）とタイポグラフィの調整
-- [x] `ConstraintLayout` を活用した、キーボードに隠れないレスポンシブレイアウト
+- [x] `ConstraintLayout` を活用した、キーボードに隠れないレスポシブレイアウト
 - [x] タスク0件時の「空状態メッセージ」表示制御
 
 ---
@@ -74,21 +72,27 @@ Androidアプリ開発の基礎を網羅的に習得する。
 - [x] `Spinner` による並び替えUIの追加
 - [x] 「作成順」「名前順」「完了状態順」のソートロジック実装
 - [x] 検索と並び替えの統合 (`applyFilterAndSort`)
-- [x] チェック時の自動並び替え反映
-
-学んだこと
-* `Spinner` の使い方と `AdapterView.OnItemSelectedListener`
-* Kotlinのコレクション操作 (`sortedBy`, `sortedByDescending`)
-* 複数の状態（検索ワードとソート順）を統合してUIを制御する手法
-* テーマ設定 (`NoActionBar`) によるレイアウト被りの解消
 
 ---
 
-## Day13：LiveDataによるリアクティブUI（次回予定）
-- [ ] `LiveData` または `StateFlow` の導入
-- [ ] データベース変更時の自動画面更新
+## Day13：リファクタリングとリアクティブUI
+- [x] `LiveData` の導入によるデータの自動同期（監視）実装
+- [x] `Gson` や古いコメント、未使用 `import` の完全削除
+- [x] 全メッセージ・色のリソース化 (`strings.xml`, `colors.xml`)
+- [x] ビルド不具合（KSPとKotlinバージョンの競合）の解消
+
+学んだこと
+* LiveDataによる「変更の自動検知」と画面更新の自動化
+* ハードコードを避けることによるメンテナンス性の向上
+* KSP/Kotlinなどの開発ツールの依存関係トラブルへの対処法
+
+---
+
+## Day14：プロジェクトを完成させる（次回予定）
+- [ ] 最終動作確認
+- [ ] プロジェクト成果物のまとめ（README作成等）
 
 ---
 
 ## 現時点での達成度
-Day 1 から Day 12 まで完了。高度なフィルタリングとソート機能が備わり、本格的なToDoアプリとしての基盤が固まりました。
+Day 1 から Day 13 まで完了。LiveDataの導入により、モダンなAndroid開発の標準的なスタイルが確立されました。

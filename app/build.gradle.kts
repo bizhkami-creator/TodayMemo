@@ -42,7 +42,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.recyclerview)
     implementation(libs.google.material)
-    implementation(libs.gson)
 
     // Room
     implementation(libs.androidx.room.runtime)

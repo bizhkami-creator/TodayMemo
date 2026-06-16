@@ -1,5 +1,6 @@
 package com.example.todaymemo
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -12,19 +13,16 @@ import androidx.room.Update
 @Dao
 interface TaskDao {
 
-    // すべてのタスクをIDの降順（新しい順）で取得する
-    @Query("SELECT * FROM tasks ORDER BY id DESC")
-    fun getAllTasks(): List<Task>
+    // すべてのタスクを取得（LiveDataを返すように変更：自動更新の魔法！）
+    @Query("SELECT * FROM tasks")
+    fun getAllTasks(): LiveData<List<Task>>
 
-    // 新しいタスクを追加する
     @Insert
     fun insertTask(task: Task)
 
-    // タスクの内容（完了フラグなど）を更新する
     @Update
     fun updateTask(task: Task)
 
-    // 指定したタスクを削除する
     @Delete
     fun deleteTask(task: Task)
 }

@@ -1,5 +1,6 @@
 package com.example.todaymemo
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -10,19 +11,16 @@ import kotlinx.coroutines.launch
  */
 class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
+    // データベースの全タスク（自動更新されるリスト）
+    val allTasks: LiveData<List<Task>> = repository.allTasks
+
     /**
      * タスクを追加する
      */
-    fun addTask(title: String, onComplete: () -> Unit) {
-        // viewModelScopeを使うと、ViewModelが消える時に自動でコルーチンも止めてくれる
+    fun addTask(title: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val newTask = Task(title = title)
             repository.insertTask(newTask)
-            
-            // 処理が終わったら、メインスレッドで合図を送る
-            launch(Dispatchers.Main) {
-                onComplete()
-            }
         }
     }
 
@@ -38,13 +36,9 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     /**
      * タスクを削除する
      */
-    fun deleteTask(task: Task, onComplete: () -> Unit) {
+    fun deleteTask(task: Task) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteTask(task)
-            
-            launch(Dispatchers.Main) {
-                onComplete()
-            }
         }
     }
 }
