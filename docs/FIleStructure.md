@@ -1,35 +1,33 @@
-# 📂 TodayMemo プロジェクト構造 (Day 12 終了時点)
+# 📂 TodayMemo プロジェクト構造 (Day 13 終了時点)
 
-MVVMアーキテクチャを採用し、リアルタイム検索と動的並び替え機能を備えた高度な構成です。
+MVVMアーキテクチャに加え、LiveDataによるリアクティブUIと徹底したクリーンアップを実施した構成です。
 
 ```text
 TodayMemo/
 ├── app/
-│   ├── build.gradle.kts          # 依存関係（Room, Material, ViewModel等）
+│   ├── build.gradle.kts          # 依存関係の整理（不要なGsonを削除）
 │   └── src/main/
-│       ├── AndroidManifest.xml   # アプリの基本設定
+│       ├── AndroidManifest.xml
 │       ├── java/com/example/todaymemo/
-│       │   ├── MainActivity.kt        # 【View】UI操作、検索・並び替えの監視
-│       │   ├── TaskViewModel.kt       # 【ViewModel】ロジックと状態管理
-│       │   ├── TaskViewModelFactory.kt# ViewModel生成
-│       │   ├── TaskRepository.kt      # 【Repository】データアクセス
-│       │   ├── Task.kt                # 【Model/Entity】データ定義
-│       │   ├── TaskDao.kt             # 【DAO】Room操作定義
-│       │   ├── AppDatabase.kt         # 【Database】DB本体
-│       │   └── TaskAdapter.kt         # RecyclerView制御、検索・ソートロジック
+│       │   ├── MainActivity.kt        # 【View】LiveDataの監視とUI更新に専念
+│       │   ├── TaskViewModel.kt       # 【ViewModel】LiveDataで最新データを公開
+│       │   ├── TaskViewModelFactory.kt
+│       │   ├── TaskRepository.kt      # 【Repository】
+│       │   ├── Task.kt                # 【Model/Entity】toString等の整理
+│       │   ├── TaskDao.kt             # 【DAO】LiveDataを返すように進化
+│       │   ├── AppDatabase.kt
+│       │   └── TaskAdapter.kt         # 【Adapter】色のリソース対応
 │       └── res/
 │           ├── layout/
-│           │   ├── activity_main.xml  # メイン画面（Spinner/EditText等配置）
-│           │   └── item_task.xml      # タスク1行分のレイアウト
-│           ├── menu/
-│           │   └── sort_menu.xml      # （予備）並び替えメニュー定義
+│           │   ├── activity_main.xml  # 文字列のリソース化対応
+│           │   └── item_task.xml
 │           └── values/
-│               ├── colors.xml         # 色定義
-│               ├── strings.xml        # 並び替え選択肢等の文字列
-│               └── themes.xml         # NoActionBar設定
+│               ├── colors.xml         # アプリ全体の共通色の定義
+│               ├── strings.xml        # 全メッセージの外部化
+│               └── themes.xml         # テーマ設定
 └── gradle/
-    ├── libs.versions.toml        # バージョン管理
-    └── gradle.properties         # KSP動作設定
+    ├── libs.versions.toml        # 不要なライブラリ定義の削除
+    └── gradle.properties
 ```
 
 ---
@@ -37,12 +35,12 @@ TodayMemo/
 ## 📄 各層の役割詳細 (MVVM)
 
 ### 1. View層 (Activity / Adapter / XML)
-- **MainActivity.kt**: UI操作の受付。`addTextChangedListener`（検索）と `onItemSelectedListener`（並び替え）を使用してアダプターに命令を出します。
-- **TaskAdapter.kt**: 検索フィルタと並び替えロジックの統合。`applyFilterAndSort()` により、2つの機能の整合性を保ちます。
-- **activity_main.xml**: `Spinner` を追加し、検索と並び替えを同時に操作できるUIを構築。
+- **MainActivity.kt**: `viewModel.allTasks.observe` により、データの変更を自動検知して画面を更新します。手動の再読み込みロジックを廃止しました。
+- **TaskAdapter.kt**: 検索とソートを統合管理。色の指定などを `colors.xml` から取得するように修正しました。
 
 ### 2. ViewModel層
-- **TaskViewModel.kt**: 非同期でのデータベース操作（追加・更新・削除）を管理。
+- **TaskViewModel.kt**: `LiveData` を通じて、リポジトリから取得したデータを不変な状態でViewに提供します。
 
 ### 3. Repository層 / Model層
-- データの永続化と、ビジネスルールに基づいたデータ提供を担当。
+- **TaskDao.kt**: 戻り値を `LiveData<List<Task>>` にすることで、Roomによる自動監視を有効化しました。
+- **Task.kt**: データベースのテーブル定義。クリーンアップにより保守性を高めました。
