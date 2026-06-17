@@ -10,6 +10,11 @@ class TaskRepository(private val taskDao: TaskDao) {
     // データベースの全データを監視可能な状態で提供
     val allTasks: LiveData<List<Task>> = taskDao.getAllTasks()
 
+    // 未完了タスクを直接取得
+    fun getIncompleteTasks(): List<Task> {
+        return taskDao.getIncompleteTasks()
+    }
+
     // タスクを追加
     suspend fun insertTask(task: Task) {
         taskDao.insertTask(task)

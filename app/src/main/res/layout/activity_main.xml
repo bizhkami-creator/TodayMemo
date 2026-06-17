@@ -19,23 +19,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- 2. 並び替えSpinner -->
+    <!-- 2. 並び替えSpinner (文字色を安定させる設定を追加) -->
     <Spinner
         android:id="@+id/spinnerSort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:entries="@array/sort_options"
+        android:backgroundTint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/textViewTitle"
         app:layout_constraintBottom_toBottomOf="@id/textViewTitle" />
 
-    <!-- 3. 検索バー -->
+    <!-- 3. 検索バー (文字色とヒント色を明示) -->
     <EditText
         android:id="@+id/editTextSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/hint_search_tasks"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_text"
         android:inputType="text"
         android:padding="12dp"
         android:background="@android:drawable/edit_text"
@@ -44,7 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 4. 入力エリア -->
+    <!-- 4. 入力エリア (文字色とヒント色を明示) -->
     <LinearLayout
         android:id="@+id/layoutInput"
         android:layout_width="0dp"
@@ -62,6 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/hint_new_task"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_text"
             android:inputType="text" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

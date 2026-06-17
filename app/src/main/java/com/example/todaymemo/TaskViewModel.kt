@@ -14,6 +14,11 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
     // データベースの全タスク（自動更新されるリスト）
     val allTasks: LiveData<List<Task>> = repository.allTasks
 
+    // 未完了タスクを取得（通知用などの一時的な取得に使う）
+    suspend fun getIncompleteTasks(): List<Task> {
+        return repository.getIncompleteTasks()
+    }
+
     /**
      * タスクを追加する
      */

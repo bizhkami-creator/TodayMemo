@@ -8,6 +8,6 @@
     <!-- 背景・カード用 -->
     <color name="background_light_gray">#F5F5F5</color>
     <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="gray_text">#888888</color>
+    <color name="black">#000000</color> <!-- ハッキリした黒 -->
+    <color name="gray_text">#757575</color> <!-- 読みやすい濃いグレー -->
 </resources>

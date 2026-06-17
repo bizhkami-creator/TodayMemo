@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- DarkActionBar から NoActionBar に変更して、アプリ標準の帯を消します -->
     <style name="Theme.TodayMemo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- プライマリーカラーの設定 -->
+        <!-- メインカラー -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
+
+        <!-- Xperia等の文字化け（白抜き）対策 -->
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/gray_text</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray_text</item>
+
+        <!-- Spinner（ドロップダウン）内の文字色を黒に固定 -->
+        <item name="android:spinnerItemStyle">@style/CustomSpinnerItem</item>
+    </style>
+
+    <style name="CustomSpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

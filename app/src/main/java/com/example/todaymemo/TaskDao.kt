@@ -7,15 +7,15 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 
-/**
- * データベースへの操作（追加・削除・取得など）を定義する窓口
- */
 @Dao
 interface TaskDao {
 
-    // すべてのタスクを取得（LiveDataを返すように変更：自動更新の魔法！）
     @Query("SELECT * FROM tasks")
     fun getAllTasks(): LiveData<List<Task>>
+
+    // 【追加】未完了のタスクだけをリスト形式で取得（LiveDataではなく直接のList）
+    @Query("SELECT * FROM tasks WHERE isCompleted = 0 ORDER BY id DESC")
+    fun getIncompleteTasks(): List<Task>
 
     @Insert
     fun insertTask(task: Task)
