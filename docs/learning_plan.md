@@ -1,47 +1,29 @@
 # 今日やることメモアプリ 開発計画（2週間+α）
 
 ## 目的
-Androidアプリ開発の基礎から通知等の実用機能までを網羅的に習得する。
-
-学習対象
-* Kotlin / Coroutines
-* XML Layout (ConstraintLayout, CardView, Material Design)
-* RecyclerView (Adapter, ViewHolder)
-* Room Database (Entity, DAO, Singleton)
-* MVVM Architecture (ViewModel, Repository, Factory, LiveData)
-* Notifications (Channel, Ongoing, PendingIntent)
-* Theme & Style (Xperia UI Visibility Fix)
-* Git/GitHub / AI活用開発フロー (Vibe Coding)
+Android開発の基礎からストア公開までを体験する。
 
 ---
 
-## Day1 - Day14：基礎から完成まで
-- [x] プロジェクト開始、データの永続化（SharedPreferences ➔ Room）
-- [x] UI/UX改善（Material Design, CardView, FAB, 検索, 並び替え）
-- [x] 設計（MVVM導入, LiveDataによる自動同期）
-- [x] リリース準備（README作成, ドキュメント整理）
+## Day1 - Day14：基礎・機能・設計・UI
+- [x] Room/MVVMによる堅牢なTodoアプリの完成。
+- [x] 検索・並び替え等の高度なユーザー体験の実装。
 
----
+## Day16：通知機能の実装
+- [x] 常駐通知とロック画面表示。
+- [x] Xperia/Xiaomi等のデバイス互換性対応。
 
-## Day15：予備日・追加検討
-- [x] 次のステップ「通知機能」の構想
-
----
-
-## Day16：通知機能の実装とUIブラッシュアップ
-- [x] 通知チャンネル（Notification Channel）の作成
-- [x] Android 13以降の通知権限（POST_NOTIFICATIONS）対応
-- [x] 常駐通知（Ongoing Notification）の実装
-- [x] データの変更に合わせて通知内容を自動更新
-- [x] Xperia等の端末での「白抜き文字」視認性問題の解決
+## Day17：ストア公開準備
+- [x] ストア掲載用情報の作成（短文・長文説明）。
+- [x] アダプティブアイコンの作成と Image Asset ツールの活用。
+- [x] リリース形式（AAB）と署名鍵の概念理解。
 
 学んだこと
-* Android通知システムの仕組み（Channel, Builder, Manager）
-* 各種メーカー（Xiaomi, Sony等）による通知制限と、それに対する実装上の工夫
-* `setOngoing(true)` によるスワイプで消えない通知の作り方
-* デバイスのダークモードやテーマ設定に左右されない「文字色・ヒント色」の明示的指定（色のハードコート回避とテーマ制御）
+* ストア掲載における「ユーザーメリット」の伝え方（マーケティング視点）。
+* 端末ごとに形が変わる Adaptive Icon の仕組み。
+* データの透明性（Data Safety）の重要性。
 
 ---
 
 ## 現時点での達成度
-Day 1 から Day 16 まで完了。通知機能と、あらゆる端末で使いやすいUIの最適化が完了しました。
+Day 1 から Day 17 まで完了。技術的な開発はほぼ終え、現在は「製品として世に出すための準備」を完璧に整えました。
