@@ -1,4 +1,4 @@
-package com.example.todaymemo.ui.theme
+package com.todaymemo.myapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.example.todaymemo
+package com.todaymemo.myapp
 
 import android.graphics.Paint
 import android.view.LayoutInflater

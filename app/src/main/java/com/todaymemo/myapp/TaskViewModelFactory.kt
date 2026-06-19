@@ -1,4 +1,4 @@
-package com.example.todaymemo
+package com.todaymemo.myapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

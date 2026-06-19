@@ -1,4 +1,4 @@
-package com.example.todaymemo
+package com.todaymemo.myapp
 
 import android.Manifest
 import android.app.Notification
@@ -7,6 +7,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -39,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: TaskAdapter
 
     companion object {
-        const val CHANNEL_ID = "today_memo_ongoing_channel"
+        const val CHANNEL_ID = "today_memo_emergency_channel"
         const val ONGOING_NOTIFICATION_ID = 100 // 常駐通知用の固定ID
     }
 
@@ -74,7 +77,6 @@ class MainActivity : AppCompatActivity() {
             emptyList(),
             onStatusChanged = { updatedTask -> 
                 viewModel.updateTask(updatedTask)
-                // 【常駐通知】完了チェック時も通知を更新
                 updateOngoingNotification()
             },
             onItemLongClicked = { taskToDelete ->
@@ -88,7 +90,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.allTasks.observe(this) { tasks ->
             adapter.updateData(tasks)
             updateEmptyMessageVisibility(tasks, textViewEmptyMessage)
-            // 【常駐通知】起動時やデータ変更時に通知を更新
             updateOngoingNotification()
         }
 
@@ -119,12 +120,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 常駐通知を更新・表示する
-     */
     private fun updateOngoingNotification() {
         lifecycleScope.launch {
-            // Roomの更新が完了するのをわずかに待つ
             delay(200)
             
             val incompleteTasks = withContext(Dispatchers.IO) {
@@ -149,14 +146,15 @@ class MainActivity : AppCompatActivity() {
                 .setContentTitle("今日のTodo（常駐中）")
                 .setContentText(if (incompleteTasks.size > 3) "$contentText\n..." else contentText)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT) // 常駐なので通常優先度でOK
-                .setOngoing(true) // 【重要】スワイプで消せなくする
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setOngoing(true)
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(false) // タップしても消えない
+                .setAutoCancel(false)
 
             if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.POST_NOTIFICATIONS) ==
                 PackageManager.PERMISSION_GRANTED) {
-                // 同じIDで通知を出し、内容を書き換える
                 NotificationManagerCompat.from(this@MainActivity).notify(ONGOING_NOTIFICATION_ID, builder.build())
             }
         }
@@ -175,11 +173,13 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "TodayMemo常駐通知"
             val descriptionText = "タスクを通知欄に常に表示します"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH 
             
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
-                setShowBadge(false) // アイコン上のドットは出さない
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                enableLights(true)
+                enableVibration(true)
             }
             val notificationManager: NotificationManager =
                 getSystemService(NotificationManager::class.java)
@@ -198,7 +198,6 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton(getString(R.string.btn_yes)) { _, _ ->
                 viewModel.deleteTask(task)
                 Toast.makeText(this, getString(R.string.msg_deleted), Toast.LENGTH_SHORT).show()
-                // 削除後は allTasks.observe が自動で動き、updateOngoingNotification が呼ばれます
             }
             .setNegativeButton(getString(R.string.btn_no), null)
             .show()

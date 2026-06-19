@@ -1,4 +1,4 @@
-package com.example.todaymemo
+package com.todaymemo.myapp
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

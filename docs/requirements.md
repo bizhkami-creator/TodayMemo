@@ -17,12 +17,14 @@
 - **ブランディング**: アダプティブアイコンの採用、ストア掲載情報の整備。
 
 ## 4. 技術スタック (Technical Stack)
+- **パッケージ名**: `com.todaymemo.myapp`
 - **アーキテクチャ**: MVVM + Repository Pattern
 - **データベース**: Room (SQLite) / LiveData
 - **非同期処理**: Kotlin Coroutines
 - **ビルドツール**: Gradle (Version Catalog), KSP
 
-## 5. 公開要件 (Release Requirements)
+## 5. 公開ステータス (Release Status)
+- **現在のバージョン**: v1.1 (VersionCode: 2)
 - **配布形式**: Android App Bundle (AAB)
-- **署名**: Google Play アプリ署名
+- **審査状況**: Google Play Console 審査中 (Day 18)
 - **プライバシー**: Data Safety（データ収集なし）の申告。

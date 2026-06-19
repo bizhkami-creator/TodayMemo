@@ -1,4 +1,4 @@
-package com.example.todaymemo
+package com.todaymemo.myapp
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
